@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class IosProvider extends ChangeNotifier {
   bool? isProfile;
 
-  bool Theme_Mode = true;
+  bool Theme_Mode = false;
 
   void showProfile(isProfile) {
     this.isProfile = isProfile;
