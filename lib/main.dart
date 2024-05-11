@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_converter/controller/IosProvider.dart';
+import 'package:platform_converter/controller/AppProvider.dart';
 import 'package:platform_converter/controller/main_Provider.dart';
 import 'package:platform_converter/view/HomePage.dart';
+import 'package:platform_converter/view/HomePage/AndroidScreen/callsPage.dart';
+import 'package:platform_converter/view/HomePage/AndroidScreen/chatsPage.dart';
+import 'package:platform_converter/view/HomePage/AndroidScreen/profilePage.dart';
+import 'package:platform_converter/view/HomePage/AndroidScreen/settingsPage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -10,7 +14,7 @@ void main() {
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -22,26 +26,44 @@ class _MainPageState extends State<MainPage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MainProvider()),
-        ChangeNotifierProvider(create: (context) => IosProvider()),
+        ChangeNotifierProvider(create: (context) => PlatFormProvider()),
       ],
       builder: (context, child) {
         return Consumer<MainProvider>(
-          builder: (BuildContext context, value, Widget? child) {
+          builder: (BuildContext context, MainProvider value, Widget? child) {
             if (value.isAndroid) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                initialRoute: "HomePage",
-                routes: {
-                  "HomePage": (context) => HomePage(),
+              return Consumer<PlatFormProvider>(
+                builder: (BuildContext context, PlatFormProvider value,
+                    Widget? child) {
+                  // Debugging: Check if the correct theme mode is received
+                  print('Theme mode for Android: ${value.Android_Theme_Mode}');
+                  return MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    initialRoute: "HomePage",
+                    theme: value.Android_Theme_Mode
+                        ? ThemeData(brightness: Brightness.dark)
+                        : ThemeData(brightness: Brightness.light),
+                    routes: {
+                      "HomePage": (context) => HomePage(),
+                      "ProfilePage": (context) => ProfilePage(),
+                      "ChatsPage": (context) => ChatsPage(),
+                      "CallsPage": (context) => CallsPage(),
+                      "SettingsPage": (context) => SettingsPage(),
+                    },
+                  );
                 },
               );
             } else {
-              return Consumer<IosProvider>(
-                builder: (BuildContext context, value, Widget? child) {
+              return Consumer<PlatFormProvider>(
+                builder: (BuildContext context, PlatFormProvider value,
+                    Widget? child) {
+                  // Debugging: Check if the correct theme mode is received
+                  print('Theme mode for iOS: ${value.Ios_Theme_Mode}');
                   return CupertinoApp(
                     theme: CupertinoThemeData(
-                      brightness:
-                          value.Theme_Mode ? Brightness.dark : Brightness.light,
+                      brightness: value.Ios_Theme_Mode
+                          ? Brightness.dark
+                          : Brightness.light,
                     ),
                     debugShowCheckedModeBanner: false,
                     initialRoute: "/",

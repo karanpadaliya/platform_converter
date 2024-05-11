@@ -1,27 +1,57 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class IosProvider extends ChangeNotifier {
+class PlatFormProvider extends ChangeNotifier {
   bool? isProfile;
 
-  bool Theme_Mode = false;
 
   void showProfile(isProfile) {
     this.isProfile = isProfile;
     notifyListeners();
   }
 
-  void changeTheme() {
-    Theme_Mode = !Theme_Mode;
+  bool Android_Theme_Mode = false;
+  void change_Android_Theme() {
+    Android_Theme_Mode = !Android_Theme_Mode;
     notifyListeners();
   }
 
-//   Image Set
-  String? XFile;
 
+  bool Ios_Theme_Mode = false;
+
+  void change_Ios_Theme() {
+    Ios_Theme_Mode = !Ios_Theme_Mode;
+    notifyListeners();
+  }
+
+//   Setting Image Set
+  String? XFile;
   void setImage(getImage) {
     XFile = getImage;
   }
+
+//   Profile Image Set
+  String? PFile;
+  void setPFile(getImage){
+    PFile = getImage;
+  }
+//   All Profile Page Data
+  String? FullName;
+  String? MobileNo;
+  String? Chat;
+  String? Date;
+  String? Time;
+
+  void getProfileDetails([fullName, mobileNo, chat, date, time]){
+    FullName = fullName;
+    MobileNo = mobileNo;
+    Chat = chat;
+    Date = date;
+    Time = time;
+  }
+
+
+
 
 // Method to clear the image-related data
   void clearImage() {

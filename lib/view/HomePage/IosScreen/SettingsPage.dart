@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:platform_converter/controller/IosProvider.dart';
+import 'package:platform_converter/controller/AppProvider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -15,6 +15,17 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController ProfileNameController = TextEditingController();
   TextEditingController ProfileBioController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize text controllers with values from the provider
+    ProfileNameController.text =
+        Provider.of<PlatFormProvider>(context, listen: false).ProfileName ?? '';
+    ProfileBioController.text =
+        Provider.of<PlatFormProvider>(context, listen: false).ProfileBio ?? '';
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Consumer<IosProvider>(
+                Consumer<PlatFormProvider>(
                   builder: (BuildContext context, value, Widget? child) {
                     return CupertinoListSection(
                       header: Text("Set Platform".toUpperCase()),
@@ -48,14 +59,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           trailing: CupertinoSwitch(
                             value: value.isProfile ?? false,
                             onChanged: (newValue) {
-                              Provider.of<IosProvider>(context, listen: false)
+                              Provider.of<PlatFormProvider>(context, listen: false)
                                   .showProfile(newValue);
                             },
                           ),
                         ),
                         Visibility(
                           visible:
-                              Provider.of<IosProvider>(context).isProfile ??
+                              Provider.of<PlatFormProvider>(context).isProfile ??
                                   false,
                           child: Container(
                             height: 300,
@@ -93,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                       if (file != null) {
                                                         // Do something with the captured image file
                                                         // For example, you can set it to the provider
-                                                        Provider.of<IosProvider>(
+                                                        Provider.of<PlatFormProvider>(
                                                                 context,
                                                                 listen: false)
                                                             .setImage(
@@ -123,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                       if (file != null) {
                                                         // Do something with the captured image file
                                                         // For example, you can set it to the provider
-                                                        Provider.of<IosProvider>(
+                                                        Provider.of<PlatFormProvider>(
                                                                 context,
                                                                 listen: false)
                                                             .setImage(
@@ -148,21 +159,36 @@ class _SettingsPageState extends State<SettingsPage> {
                                       },
                                     );
                                   },
-                                  child: CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Provider.of<IosProvider>(context).isImage
-                                        ? CupertinoColors.activeBlue
-                                        : null,
-                                    backgroundImage: Provider.of<IosProvider>(context).isImage
-                                        ? null
-                                        : FileImage(
-                                        File(value.XFile ?? "Image_NOT_Found")),
-                                    child: CupertinoButton(
-                                        child: Icon(
-                                          CupertinoIcons.camera,
-                                          // color: Colors.white,
+                                  child: Stack(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor:
+                                            Provider.of<PlatFormProvider>(context)
+                                                    .isImage
+                                                ? CupertinoColors.activeBlue
+                                                : null,
+                                        backgroundImage:
+                                            Provider.of<PlatFormProvider>(context)
+                                                    .isImage
+                                                ? null
+                                                : FileImage(File(value.XFile ??
+                                                    "Image_NOT_Found")),
+                                      ),
+                                      Positioned(
+                                        top: 60,
+                                        left: 60,
+                                        // bottom: 20,
+                                        child: CupertinoButton(
+                                          child: Icon(
+                                            CupertinoIcons.add_circled_solid,
+                                            // color: Colors.blue,
+                                            size: 25,
+                                          ),
+                                          onPressed: () {},
                                         ),
-                                        onPressed: () {}),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Padding(
@@ -200,7 +226,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                       onPressed: () {
                                         ProfileNameController.clear();
                                         ProfileBioController.clear();
-                                        Provider.of<IosProvider>(context, listen: false)
+                                        Provider.of<PlatFormProvider>(context,
+                                                listen: false)
                                             .clearImage();
                                       },
                                       child: Text(
@@ -215,7 +242,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 .text.isNotEmpty &&
                                             ProfileBioController
                                                 .text.isNotEmpty) {
-                                          Provider.of<IosProvider>(context,
+                                          Provider.of<PlatFormProvider>(context,
                                                   listen: false)
                                               .setProfile(
                                                   ProfileNameController.text,
@@ -258,10 +285,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: Text("Theme"),
                           subtitle: Text("Change Theme"),
                           trailing: CupertinoSwitch(
-                            value: value.Theme_Mode ?? false,
+                            value: value.Ios_Theme_Mode ?? false,
                             onChanged: (newValue) {
-                              Provider.of<IosProvider>(context, listen: false)
-                                  .changeTheme();
+                              Provider.of<PlatFormProvider>(context, listen: false)
+                                  .change_Ios_Theme();
                             },
                           ),
                         ),
