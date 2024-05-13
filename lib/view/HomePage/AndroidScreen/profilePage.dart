@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
-import '../../../controller/AppProvider.dart';
+import '../../../controller/PlatFormProvider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key});
@@ -64,7 +63,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                           print(
                                               'User cancelled capturing image Camera');
                                         }
-                                        setState(() {});
+                                        setState(() {
+
+                                        });
                                       },
                                       child: Text(
                                         "Camera",
@@ -75,9 +76,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                     GestureDetector(
                                       onTap: () async {
                                         XFile? file =
-                                            await ImagePicker().pickImage(
+                                        await ImagePicker().pickImage(
                                           source: ImageSource.gallery,
                                         );
+
                                         if (file != null) {
                                           Provider.of<PlatFormProvider>(
                                             context,
@@ -86,9 +88,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                           Navigator.pop(context);
                                         } else {
                                           print(
-                                              'User cancelled capturing image Gallery');
+                                              'User cancelled capturing image Camera');
                                         }
-                                        setState(() {});
+                                        setState(() {
+
+                                        });
                                       },
                                       child: Text(
                                         "Gallery",
@@ -254,6 +258,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           selectedTime!.format(context),
                         );
 
+
+
+                        // Reset text controllers
+                        Pro_Full_Name_Controller.clear();
+                        Pro_Mobile_No_Controller.clear();
+                        Pro_Chat_Controller.clear();
+
+                        // Clear selected date and time
+                        setState(() {
+                          selectedDate = null;
+                          selectedTime = null;
+                        });
+
+
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -272,8 +290,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                           },
                         );
-                        print(
-                            "Name= ${Pro_Full_Name_Controller.text} AND Bio= ${Pro_Mobile_No_Controller.text}");
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -291,7 +307,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         );
-                        print("Field is Blank");
                       }
                     },
                     child: Text(

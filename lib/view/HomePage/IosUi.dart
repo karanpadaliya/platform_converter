@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_converter/view/HomePage/IosScreen/CallsPage.dart';
-import 'package:platform_converter/view/HomePage/IosScreen/ChatsPage.dart';
-import 'package:platform_converter/view/HomePage/IosScreen/ProfilePage.dart';
-import 'package:platform_converter/view/HomePage/IosScreen/SettingsPage.dart';
+import 'package:platform_converter/view/HomePage/IosScreen/IosCallsPage.dart';
+import 'package:platform_converter/view/HomePage/IosScreen/IosChatsPage.dart';
+import 'package:platform_converter/view/HomePage/IosScreen/IosProfilePage.dart';
+import 'package:platform_converter/view/HomePage/IosScreen/IosSettingsPage.dart';
 import 'package:provider/provider.dart';
 
 import '../../controller/main_Provider.dart';
@@ -59,9 +59,9 @@ class _IosUiState extends State<IosUi> {
                       builder: (BuildContext context) {
                         switch (index) {
                           case 0:
-                            return ProfilePage();
+                            return IosProfilePage();
                           case 1:
-                            return ChatsPage();
+                            return IosChatsPage();
                           case 2:
                             return CallsPage();
                           case 3:

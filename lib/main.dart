@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_converter/controller/AppProvider.dart';
+import 'package:platform_converter/controller/PlatFormProvider.dart';
 import 'package:platform_converter/controller/main_Provider.dart';
 import 'package:platform_converter/view/HomePage.dart';
 import 'package:platform_converter/view/HomePage/AndroidScreen/callsPage.dart';
 import 'package:platform_converter/view/HomePage/AndroidScreen/chatsPage.dart';
 import 'package:platform_converter/view/HomePage/AndroidScreen/profilePage.dart';
 import 'package:platform_converter/view/HomePage/AndroidScreen/settingsPage.dart';
+import 'package:platform_converter/view/HomePage/IosScreen/IosChatsPage.dart';
+import 'package:platform_converter/view/HomePage/IosScreen/IosProfilePage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -69,6 +71,8 @@ class _MainPageState extends State<MainPage> {
                     initialRoute: "/",
                     routes: {
                       "/": (context) => HomePage(),
+                      "IosChatsPage": (context) => IosChatsPage(),
+                      "IosProfilePage": (context) => IosProfilePage(),
                     },
                   );
                 },

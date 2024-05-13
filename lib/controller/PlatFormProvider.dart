@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_converter/modal/DataModal.dart';
 
 class PlatFormProvider extends ChangeNotifier {
   bool? isProfile;
@@ -35,6 +36,15 @@ class PlatFormProvider extends ChangeNotifier {
   void setPFile(getImage){
     PFile = getImage;
   }
+
+  //Delete profile
+  void removeProfile(index){
+    profileList.removeAt(index);
+    notifyListeners();
+  }
+
+
+
 //   All Profile Page Data
   String? FullName;
   String? MobileNo;
@@ -42,12 +52,17 @@ class PlatFormProvider extends ChangeNotifier {
   String? Date;
   String? Time;
 
+  List<DataModal> profileList = [];
+
   void getProfileDetails([fullName, mobileNo, chat, date, time]){
-    FullName = fullName;
-    MobileNo = mobileNo;
-    Chat = chat;
-    Date = date;
-    Time = time;
+
+    profileList.add(DataModal(fullName: fullName, mobileNo: mobileNo, chat: chat, date: date, time: time));
+
+    // FullName = fullName;
+    // MobileNo = mobileNo;
+    // Chat = chat;
+    // Date = date;
+    // Time = time;
   }
 
 
@@ -74,4 +89,18 @@ class PlatFormProvider extends ChangeNotifier {
   void removeImg(img) {
     isImage = img;
   }
+
+//   set IOS Date and time
+  TimeOfDay? time;
+  DateTime? date;
+
+  void setTime(TimeOfDay time) {
+    this.time = time;
+    notifyListeners();
+  }
+  void setDate(DateTime date) {
+    this.date = date;
+    notifyListeners();
+  }
+
 }

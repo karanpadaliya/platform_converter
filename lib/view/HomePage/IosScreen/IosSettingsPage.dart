@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:platform_converter/controller/AppProvider.dart';
+import 'package:platform_converter/controller/PlatFormProvider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
