@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController Pro_Chat_Controller = TextEditingController();
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
+  XFile? file;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () async {
-                                        XFile? file =
-                                            await ImagePicker().pickImage(
+                                        file = await ImagePicker().pickImage(
                                           source: ImageSource.camera,
                                         );
 
@@ -57,15 +57,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                           Provider.of<PlatFormProvider>(
                                             context,
                                             listen: false,
-                                          ).setPFile(file.path);
+                                          ).setPFile(file!.path);
                                           Navigator.pop(context);
                                         } else {
                                           print(
                                               'User cancelled capturing image Camera');
                                         }
-                                        setState(() {
-
-                                        });
+                                        setState(() {});
                                       },
                                       child: Text(
                                         "Camera",
@@ -75,8 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Divider(),
                                     GestureDetector(
                                       onTap: () async {
-                                        XFile? file =
-                                        await ImagePicker().pickImage(
+                                        file = await ImagePicker().pickImage(
                                           source: ImageSource.gallery,
                                         );
 
@@ -84,15 +81,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                           Provider.of<PlatFormProvider>(
                                             context,
                                             listen: false,
-                                          ).setPFile(file.path);
+                                          ).setPFile(file!.path);
                                           Navigator.pop(context);
                                         } else {
                                           print(
                                               'User cancelled capturing image Camera');
                                         }
-                                        setState(() {
-
-                                        });
+                                        setState(() {});
                                       },
                                       child: Text(
                                         "Gallery",
@@ -115,12 +110,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundColor: Provider.of<PlatFormProvider>(
-                            context,
-                            listen: false,
-                          ).isImage
-                              ? Colors.blue
-                              : null,
                           backgroundImage: Provider.of<PlatFormProvider>(
                             context,
                           ).isImage
@@ -246,7 +235,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           Pro_Mobile_No_Controller.text.isNotEmpty &&
                           Pro_Chat_Controller.text.isNotEmpty &&
                           selectedDate != null &&
-                          selectedTime != null) {
+                          selectedTime != null &&
+                          file != null) {
                         Provider.of<PlatFormProvider>(
                           context,
                           listen: false,
@@ -256,21 +246,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           Pro_Chat_Controller.text,
                           selectedDate!.toString(),
                           selectedTime!.format(context),
+                          file?.path,
                         );
-
-
 
                         // Reset text controllers
                         Pro_Full_Name_Controller.clear();
                         Pro_Mobile_No_Controller.clear();
                         Pro_Chat_Controller.clear();
+                        file = null;
+                        Provider.of<PlatFormProvider>(
+                          context,
+                          listen: false,
+                        ).setPFile(null);
 
                         // Clear selected date and time
                         setState(() {
                           selectedDate = null;
                           selectedTime = null;
                         });
-
 
                         showDialog(
                           context: context,

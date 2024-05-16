@@ -72,8 +72,8 @@ class _ChatsPageState extends State<ChatsPage> {
             itemCount: value.profileList.length,
             itemBuilder: (context, index) {
               DataModal profile = value.profileList[index];
-              var backgroundImage =
-                  Provider.of<PlatFormProvider>(context, listen: false).PFile;
+              // var backgroundImage =
+              //     Provider.of<PlatFormProvider>(context, listen: false).PFile;
               return InkWell(
                 onTap: () {
                   Navigator.pushNamed(
@@ -84,7 +84,7 @@ class _ChatsPageState extends State<ChatsPage> {
                 },
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: FileImage(File(backgroundImage!)),
+                    backgroundImage: FileImage(File(profile.image??"")),
                   ),
                   title: Text(profile.fullName ?? "Contact_Name_Not_Found"),
                   subtitle:

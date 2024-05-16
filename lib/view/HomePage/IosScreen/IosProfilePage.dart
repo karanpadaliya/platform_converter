@@ -19,6 +19,7 @@ class _IosProfilePageState extends State<IosProfilePage> {
   TextEditingController proChatController = TextEditingController();
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
+  XFile? file;
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +43,35 @@ class _IosProfilePageState extends State<IosProfilePage> {
                       actions: [
                         CupertinoActionSheetAction(
                           onPressed: () async {
-                            XFile? file = await ImagePicker().pickImage(
+                            file = await ImagePicker().pickImage(
                               source: ImageSource.camera,
                             );
-                            _setImage(file);
+                            if (file != null) {
+                              Provider.of<PlatFormProvider>(
+                                context,
+                                listen: false,
+                              ).setPFile(file!.path);
+                              Navigator.pop(context);
+                            } else {
+                              print('User cancelled capturing image Camera');
+                            }
                           },
                           child: Text('Camera'),
                         ),
                         CupertinoActionSheetAction(
                           onPressed: () async {
-                            XFile? file = await ImagePicker().pickImage(
+                            file = await ImagePicker().pickImage(
                               source: ImageSource.gallery,
                             );
-                            _setImage(file);
+                            if (file != null) {
+                              Provider.of<PlatFormProvider>(
+                                context,
+                                listen: false,
+                              ).setPFile(file!.path);
+                              Navigator.pop(context);
+                            } else {
+                              print('User cancelled capturing image Camera');
+                            }
                           },
                           child: Text('Gallery'),
                         ),
@@ -77,12 +94,11 @@ class _IosProfilePageState extends State<IosProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundColor: value.isImage ? Colors.blue : null,
                           backgroundImage: value.isImage
                               ? null
                               : FileImage(
-                                  File(value.PFile ?? "Image_NOT_Found"),
-                                ),
+                            File(value.PFile ?? "Image_NOT_Found"),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 60, left: 60),
@@ -132,35 +148,23 @@ class _IosProfilePageState extends State<IosProfilePage> {
               ),
             ),
             Consumer<PlatFormProvider>(
-              builder: (BuildContext context, PlatFormProvider value,
-                  Widget? child) {
-                return  TextButton(
+              builder: (BuildContext context, PlatFormProvider value, Widget? child) {
+                return TextButton(
                   onPressed: () => _selectDate(context),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Row(
                       children: [
                         Icon(Icons.date_range),
-                        Text(
-                          selectedDate == null
-                              ? 'Select Date'
-                              : 'Date: ${(value.date ?? DateTime.now())}',
-                        ),
+                        Text('Date: ${selectedDate != null ? selectedDate!.day.toString() : "No Date Selected"}'),
+                        Text('Time: ${selectedTime != null ? selectedTime!.format(context) : "No Time Selected"}'),
                       ],
                     ),
                   ),
                 );
               },
             ),
-            // Consumer<PlatFormProvider>(
-            //   builder: (BuildContext context, PlatFormProvider value,
-            //       Widget? child) {
-            //     return Text(
-            //       "Date ${(value.date ?? DateTime.now())}",
-            //       style: Theme.of(context).textTheme.bodySmall,
-            //     );
-            //   },
-            // ),
+
             SizedBox(
               height: 10,
             ),
@@ -186,11 +190,11 @@ class _IosProfilePageState extends State<IosProfilePage> {
                 child: CupertinoTimerPicker(
                   mode: CupertinoTimerPickerMode.hms,
                   initialTimerDuration:
-                      Duration(hours: 0, minutes: 0, seconds: 0),
+                  Duration(hours: 0, minutes: 0, seconds: 0),
                   onTimerDurationChanged: (value) {
                     // Handle the selected timer duration here
                     Provider.of<PlatFormProvider>(context, listen: false)
-                        .setTime(value as TimeOfDay);
+                        .setTime(value);
                   },
                 )),
             CupertinoButton(
@@ -208,36 +212,30 @@ class _IosProfilePageState extends State<IosProfilePage> {
     );
   }
 
-  void _setImage(XFile? file) {
-    if (file != null) {
-      Provider.of<PlatFormProvider>(
-        context,
-        listen: false,
-      ).setPFile(file.path);
-    } else {
-      print('User cancelled capturing image');
-    }
-    setState(() {});
-  }
-
   void _saveProfile(BuildContext context) {
     if (proFullNameController.text.isNotEmpty &&
         proMobileNoController.text.isNotEmpty &&
         proChatController.text.isNotEmpty &&
         selectedDate != null &&
-        selectedTime != null) {
+        selectedTime != null &&
+        file != null) {
       Provider.of<PlatFormProvider>(context, listen: false).getProfileDetails(
         proFullNameController.text,
         proMobileNoController.text,
         proChatController.text,
         selectedDate!.toString(),
         selectedTime!.format(context),
+        file?.path,
       );
 
       // Reset text controllers
       proFullNameController.clear();
       proMobileNoController.clear();
       proChatController.clear();
+      Provider.of<PlatFormProvider>(
+        context,
+        listen: false,
+      ).setPFile(null);
 
       // Reset date and time
       setState(() {
@@ -267,7 +265,16 @@ class _IosProfilePageState extends State<IosProfilePage> {
         context: context,
         builder: (BuildContext context) {
           return CupertinoActionSheet(
-            title: Text('Field is Blank'),
+            title: Column(
+              children: [
+                Text('fullname is Blank ${proFullNameController.text}'),
+                Text('mobile is Blank ${proMobileNoController.text}'),
+                Text('chat is Blank ${proChatController.text}'),
+                Text('date is Blank ${selectedDate ?? "null Date"}'),
+                Text('Time is Blank ${selectedTime??"null Time"}'),
+                Text('image is Blank ${file?.path}'),
+              ],
+            ),
             actions: [
               CupertinoActionSheetAction(
                 onPressed: () {
@@ -285,13 +292,25 @@ class _IosProfilePageState extends State<IosProfilePage> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != selectedDate) {
+    if (picked != null) {
       setState(() {
         selectedDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      setState(() {
+        selectedTime = pickedTime;
       });
     }
   }
