@@ -147,56 +147,45 @@ class _IosProfilePageState extends State<IosProfilePage> {
                 placeholder: 'Chat Conversation',
               ),
             ),
-            Consumer<PlatFormProvider>(
-              builder: (BuildContext context, PlatFormProvider value, Widget? child) {
-                return TextButton(
-                  onPressed: () => _selectDate(context),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      children: [
-                        Icon(Icons.date_range),
-                        Text('Date: ${selectedDate != null ? selectedDate!.day.toString() : "No Date Selected"}'),
-                        Text('Time: ${selectedTime != null ? selectedTime!.format(context) : "No Time Selected"}'),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
 
             SizedBox(
               height: 10,
             ),
-            SizedBox(
-              height: 80,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                initialDateTime: DateTime.now(),
-                minimumYear: 1900,
-                maximumYear: 2101,
-                onDateTimeChanged: (DateTime value) {
-                  // Handle the selected date here
-                  Provider.of<PlatFormProvider>(context, listen: false)
-                      .setDate(value);
-                },
+
+            // Date picker button
+            CupertinoButton(
+              onPressed: () => _selectDate(context),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Row(
+                  children: [
+                    Icon(CupertinoIcons.calendar),
+                    Text(
+                      selectedDate == null
+                          ? 'Select Date'
+                          : 'Date: ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
+                    ),
+                  ],
+                ),
               ),
             ),
-            SizedBox(
-              height: 10,
+            // Time picker button
+            CupertinoButton(
+              onPressed: () => _selectTime(context),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, top: 0),
+                child: Row(
+                  children: [
+                    Icon(CupertinoIcons.clock),
+                    Text(
+                      selectedTime == null
+                          ? 'Select Time'
+                          : 'Time: ${selectedTime!.hour}:${selectedTime!.minute}',
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(
-                height: 80,
-                child: CupertinoTimerPicker(
-                  mode: CupertinoTimerPickerMode.hms,
-                  initialTimerDuration:
-                  Duration(hours: 0, minutes: 0, seconds: 0),
-                  onTimerDurationChanged: (value) {
-                    // Handle the selected timer duration here
-                    Provider.of<PlatFormProvider>(context, listen: false)
-                        .setTime(value);
-                  },
-                )),
             CupertinoButton(
               onPressed: () {
                 _saveProfile(context);
@@ -213,105 +202,30 @@ class _IosProfilePageState extends State<IosProfilePage> {
   }
 
   void _saveProfile(BuildContext context) {
-    if (proFullNameController.text.isNotEmpty &&
-        proMobileNoController.text.isNotEmpty &&
-        proChatController.text.isNotEmpty &&
-        selectedDate != null &&
-        selectedTime != null &&
-        file != null) {
-      Provider.of<PlatFormProvider>(context, listen: false).getProfileDetails(
-        proFullNameController.text,
-        proMobileNoController.text,
-        proChatController.text,
-        selectedDate!.toString(),
-        selectedTime!.format(context),
-        file?.path,
-      );
-
-      // Reset text controllers
-      proFullNameController.clear();
-      proMobileNoController.clear();
-      proChatController.clear();
-      Provider.of<PlatFormProvider>(
-        context,
-        listen: false,
-      ).setPFile(null);
-
-      // Reset date and time
-      setState(() {
-        selectedDate = null;
-        selectedTime = null;
-      });
-
-      showCupertinoDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text('Saved !!!'),
-            content: Text('Your profile data has been saved.'),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoActionSheet(
-            title: Column(
-              children: [
-                Text('fullname is Blank ${proFullNameController.text}'),
-                Text('mobile is Blank ${proMobileNoController.text}'),
-                Text('chat is Blank ${proChatController.text}'),
-                Text('date is Blank ${selectedDate ?? "null Date"}'),
-                Text('Time is Blank ${selectedTime??"null Time"}'),
-                Text('image is Blank ${file?.path}'),
-              ],
-            ),
-            actions: [
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    // Your save profile logic here
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? DateTime.now(),
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2101),
     );
-    if (picked != null) {
+    if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
       });
-    }
   }
 
   Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: selectedTime ?? TimeOfDay.now(),
+      initialTime: TimeOfDay.now(),
     );
-    if (pickedTime != null) {
+    if (picked != null && picked != selectedTime)
       setState(() {
-        selectedTime = pickedTime;
+        selectedTime = picked;
       });
-    }
   }
 }
