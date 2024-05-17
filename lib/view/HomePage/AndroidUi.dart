@@ -20,7 +20,7 @@ class _AndroidUiState extends State<AndroidUi> {
       builder: (BuildContext context, MainProvider value, Widget? child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text("Platform Converter ${value.isAndroid}"),
+            title: Text("Platform Converter"),
             actions: [
               Switch(
                 activeColor: Colors.blue,
