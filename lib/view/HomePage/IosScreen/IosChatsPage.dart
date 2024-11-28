@@ -17,7 +17,7 @@ class _IosChatsPageState extends State<IosChatsPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text("Chats"),
       ),
       child: Column(
@@ -29,8 +29,8 @@ class _IosChatsPageState extends State<IosChatsPage> {
             width: 400,
             child: CupertinoTextField(
               placeholder: "Search",
-              prefix: Icon(CupertinoIcons.search),
-              padding: EdgeInsets.all(12),
+              prefix: const Icon(CupertinoIcons.search),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 border: Border.all(color: CupertinoColors.lightBackgroundGray),
@@ -39,7 +39,7 @@ class _IosChatsPageState extends State<IosChatsPage> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Container(
                 // height: 600, // Removed fixed height
                 // color: Colors.red,
@@ -57,13 +57,14 @@ class _IosChatsPageState extends State<IosChatsPage> {
       builder: (BuildContext context, PlatFormProvider value, Widget? child) {
         return ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: value.profileList.length,
           itemBuilder: (context, index) {
             DataModal profile = value.profileList[index];
             return CupertinoListTile(
               leading: CircleAvatar(
-                backgroundImage: FileImage(File(value.PFile ?? "Image_Not_Found")),
+                backgroundImage:
+                    FileImage(File(value.PFile ?? "Image_Not_Found")),
               ),
               title: Text(profile.fullName ?? "Contact_Name_Not_Found"),
               subtitle: Text(profile.mobileNo ?? "Contact_MobileNo_Not_Found"),
@@ -72,7 +73,7 @@ class _IosChatsPageState extends State<IosChatsPage> {
                   Provider.of<PlatFormProvider>(context, listen: false)
                       .removeProfile(index);
                 },
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(

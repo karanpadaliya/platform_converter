@@ -20,7 +20,7 @@ class _AndroidUiState extends State<AndroidUi> {
       builder: (BuildContext context, MainProvider value, Widget? child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text("Platform Converter"),
+            title: const Text("Platform Converter"),
             actions: [
               Switch(
                 activeColor: Colors.blue,
@@ -37,7 +37,7 @@ class _AndroidUiState extends State<AndroidUi> {
             length: 4, // Number of tabs
             child: Column(
               children: [
-                TabBar(
+                const TabBar(
                   // overlayColor: MaterialStatePropertyAll(Colors.red),
                   // padding: EdgeInsets.all(5),
                   indicatorColor: Colors.blue,
@@ -60,9 +60,9 @@ class _AndroidUiState extends State<AndroidUi> {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      Center(child: ProfilePage()),
-                      Center(child: ChatsPage()),
-                      Center(child: CallsPage()),
+                      const Center(child: ProfilePage()),
+                      const Center(child: ChatsPage()),
+                      const Center(child: CallsPage()),
                       Center(child: SettingsPage()),
                     ],
                   ),

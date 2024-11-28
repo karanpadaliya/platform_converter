@@ -12,7 +12,7 @@ import 'package:platform_converter/view/HomePage/IosScreen/IosProfilePage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MainPage());
+  runApp(const MainPage());
 }
 
 class MainPage extends StatefulWidget {
@@ -46,10 +46,10 @@ class _MainPageState extends State<MainPage> {
                         ? ThemeData(brightness: Brightness.dark)
                         : ThemeData(brightness: Brightness.light),
                     routes: {
-                      "HomePage": (context) => HomePage(),
-                      "ProfilePage": (context) => ProfilePage(),
-                      "ChatsPage": (context) => ChatsPage(),
-                      "CallsPage": (context) => CallsPage(),
+                      "HomePage": (context) => const HomePage(),
+                      "ProfilePage": (context) => const ProfilePage(),
+                      "ChatsPage": (context) => const ChatsPage(),
+                      "CallsPage": (context) => const CallsPage(),
                       "SettingsPage": (context) => SettingsPage(),
                     },
                   );
@@ -70,9 +70,9 @@ class _MainPageState extends State<MainPage> {
                     debugShowCheckedModeBanner: false,
                     initialRoute: "/",
                     routes: {
-                      "/": (context) => HomePage(),
-                      "IosChatsPage": (context) => IosChatsPage(),
-                      "IosProfilePage": (context) => IosProfilePage(),
+                      "/": (context) => const HomePage(),
+                      "IosChatsPage": (context) => const IosChatsPage(),
+                      "IosProfilePage": (context) => const IosProfilePage(),
                     },
                   );
                 },
